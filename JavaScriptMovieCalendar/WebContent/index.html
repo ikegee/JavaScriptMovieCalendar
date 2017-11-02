@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>JavaScript Movie Calendar</title>
+    <script type="text/javascript" src="1.10.2-jquery.min.js"></script>
+    <script type="text/javascript" src="date.js"></script>
+    <script type="text/javascript" src="dateDisplay.js"></script>
+    <script type="text/javascript" src="calendar.js"></script>
+    <link href="calendar.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+<body>
+<div id="wrapper">
+    <div id="header">
+        <h3>JavaScript Movie Calendar</h3>
+    </div>
+    <div id="container">
+        <div id="calendar">
+            <div id="displayTitle"></div>
+            <div id="dateDisplay"></div>
+        </div>
+        <div id="details">
+            <div id="detailTitle">
+                <h3>Show Details</h3>
+            </div>
+        </div>
+        <div id="navigation">
+            <!-- Form to show when user wants to search for a date -->
+            <div id="navSearch" class="inactive">
+                <label class="navInput">Day: </label>
+                <input type="text" id="day" class="navInput" />
+                <label class="navInput">Month: </label>
+                <input type="text" id="month" class="navInput" />
+                <label class="navInput">Year: </label>
+                <input type="text" id="year" class="navInput" />
+                <input type="button" id="setDateSubmit" value="Set Date" class="nav" />
+            </div>
+
+            <!-- Regular form buttons for nav bar  -->
+            <div id="navButtons" class="active">
+                <input type="button" id="previous" value="&lt;&lt; Previous" class="nav"/>
+                <input type="button" id="weekMonth" value="Month / Week" class="nav"/>
+                <input type="button" id="goToDate" value="Go To" class="nav"/>
+                <input type="button" id="search" value="Search" class="nav"/>
+                <input type="button" id="next" value="Next &gt;&gt;" class="nav"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
