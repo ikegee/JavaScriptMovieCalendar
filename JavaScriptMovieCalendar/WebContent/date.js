@@ -1,11 +1,11 @@
 /**
  * @projectDescription Extends the native Date class to perform sundry calendar specific operations
- * @author Thomas Lane
+ * @author Thomas Jane
  * @version $Revision: 453 $
  * $Date: 2012-01-17 15:38:39 -0800 (Tue, 17 Jan 2012) $
  * @modified G.E. Eidsness	
  * @version $Revision: 009 $
- * $Date: 2013-09-16 12:01:39 -0700 (Mon, 16 Sept 2013) $
+ * $Date: 2014-09-16 12:01:39 -0700 (Mon, 16 Sept 2014) $
  */
 
 //Delimiter Constant used as separator
