@@ -1,5 +1,5 @@
 /**
- * @author Thomas Lane
+ * @author Thomas Jane
  * @requires Date.js
  * @version $Revision: 229 $
  * $Date: 2011-01-16 19:08:49 -0800 (Sun, 16 Jan 2011) $
