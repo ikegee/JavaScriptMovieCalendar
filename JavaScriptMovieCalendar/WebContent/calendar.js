@@ -1,7 +1,7 @@
 /**
  * @author G.E. Eidsness	
  * @version $Revision: 009 $
- * $Date: 2013-09-16 12:01:39 -0700 (Mon, 16 Sept 2013) $
+ * $Date: 2014-09-16 12:01:39 -0700 (Mon, 16 Sept 2014) $
  *
  * Initialization for page
  * post: dateDisplay object will be instantiated with todays date
