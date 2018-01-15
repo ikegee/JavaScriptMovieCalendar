@@ -29,7 +29,7 @@
      * @private
      * @type HTMLElement
      */
-    this._displayNode =  displayDateNode;
+    this._displayNode = displayDateNode;
 
     /**
      * The output HTMLElement for displaying the date display title
@@ -37,11 +37,11 @@
      * @type HTMLElement
      */
     this._titleNode = displayTitleNode;
-
     this._detailsNode = displayDetailsNode;
 
     //Set the active date for the date display
     this.setDate(activeDay);
+    //console.log("Active Date :" + activeDay);
 }
 
 /**
@@ -84,7 +84,11 @@ DateDisplay.prototype._appendHeading = function (type){
  */
 
 DateDisplay.prototype._appendWeek = function(day, type) {
-
+	
+	var d = new Date();
+	var t =  d.getDelimDate();
+    //console.log("TodaysDate: " + t);
+    
     var weekContainer = document.createElement("div");
     weekContainer.id = "weekContainer";
     weekContainer.className = type
@@ -131,12 +135,16 @@ DateDisplay.prototype._appendWeek = function(day, type) {
                 }
                 div.appendChild(listing);
             }
-
-
         }
-        if (weekIterator.getDelimDate() == this._date.getDelimDate()) {
-            div.className = "today";
-        }
+        
+        if (weekIterator.getDelimDate() == d.getDelimDate()) {
+            div.className = "todaysDate";
+            console.log("Todays date :" + d.getDelimDate());
+        } 
+        else if (weekIterator.getDelimDate() == this._date.getDelimDate()) {
+            div.className = "today";          
+            console.log("Select date :" + this._date.getDelimDate());
+        }     
         else if (type == "week" || weekIterator.getMonth() == this._date.getMonth()) {
             div.className = "dateBlock";
         }

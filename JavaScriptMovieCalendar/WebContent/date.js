@@ -77,7 +77,7 @@ Date.prototype.incrementByDay = function (){
 
 /**
  * Decrements the value of the date object as by a single day
- * post: the date will have been descreased by a single day
+ * post: the date will have been decreased by a single day
  */
 Date.prototype.decrementByDay = function (){
     this.setDate(this.getDate()-1);
@@ -121,7 +121,7 @@ Date.prototype.incrementByMonth = function (){
     }else{
         this.setMonth(this.getMonth()+1);
     }
-    console.log("incrementByMonth:" + month);
+    //console.log("incrementByMonth:" + month);
 };
 
 /**
@@ -152,7 +152,7 @@ Date.prototype.decrementByMonth = function (){
     }else{
         this.setMonth(this.getMonth()-1);
     }
-    console.log("incrementByMonth: " + month);
+    //console.log("incrementByMonth: " + month);
 };
 
 /**

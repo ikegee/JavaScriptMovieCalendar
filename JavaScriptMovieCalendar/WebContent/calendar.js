@@ -20,16 +20,13 @@ var init = function() {
     var displayDateNode = $('#dateDisplay')[0];
     var displayTitleNode = $('#displayTitle')[0];
     var displayDetailsNode = $('#details')[0];
-
     var todaysDate = new Date();
-
     //Create XMLHttpRequest -> acts as request/response object
     request = new XMLHttpRequest();
-
     // format month to mm
     var month = (todaysDate.getMonth()+1);
     month = formatMonth(month);
-
+    
     var jsonFile = "./jsonShows/" + todaysDate.getFullYear() + "_" + month + ".json";
     submitRequest(jsonFile);
     processResponse();
@@ -187,13 +184,12 @@ var setDateClick = function(objEvent) {
     if (objEvent.srcElement) { targ = objEvent.srcElement; }
     else if (objEvent.target) { targ = objEvent.target; }
 
-    if (targ.className == "dateBlock" | targ.className == "today") {
+    if (targ.className == "dateBlock" || targ.className == "today" || targ.className == "todaysDate" ) {
         var targetId = targ.id.split("_");
-		//console.log("targetId: " + targetId);
-		
+		//console.log("targetId: " + targetId);		
         setDate(targetId[0], targetId[1], targetId[2]);
     }
-    else if (targ.parentNode.className == "dateBlock" | targ.parentNode.className == "today") {
+    else if (targ.parentNode.className == "dateBlock" || targ.parentNode.className == "today" || targ.parentNode.className == "todaysDate") {
         var targetId = targ.parentNode.id.split("_");
 		//console.log("targetId: " + targetId);
         var targetDate = targetId[0] + "_" + targetId[1] + "_" + targetId[2];

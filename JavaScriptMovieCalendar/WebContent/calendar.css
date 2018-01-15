@@ -126,22 +126,22 @@ color: #fff;
     float:left;
 }
 
-.dateBlock:hover, .today:hover {
+.dateBlock:hover, .today:hover, .todaysDate:hover {
     border:solid red 2px;
 }
 
-.dateBlock, .today, .blankDateBlock, .dayName {
+.dateBlock, .today, .todaysDate, .blankDateBlock, .dayName {
     border:solid #d3d3d3 2px;
 }
 
-.month .dateBlock, .month .today, .month .blankDateBlock{
+.month .dateBlock, .month .today, .month .todaysDate, .month .blankDateBlock{
     margin:1px;
     float:left;
     width:114px;
     height:95px;
 }
 
-.week .dateBlock, .week .today {
+.week .dateBlock, .week .today, .week .todaysDate{
     margin:2px;
     width:715px;
     height:80px;
@@ -149,6 +149,10 @@ color: #fff;
 
 .month .blankDateBlock{
     background-color:#ECF1EF;
+}
+
+.todaysDate{
+    background-color:#fbf5d5;
 }
 
 .week #weekContainer {
@@ -173,7 +177,7 @@ color: #fff;
     float:left;
 }
 
-.today:hover .listing:hover, .dateBlock:hover .listing:hover {
+.today:hover, .todaysDate.hover, .listing:hover, .dateBlock:hover .listing:hover {
 	text-decoration:underline;
     color:#455776;
 }
