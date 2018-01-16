@@ -86,7 +86,7 @@ DateDisplay.prototype._appendHeading = function (type){
 DateDisplay.prototype._appendWeek = function(day, type) {
 	
 	var d = new Date();
-	var t =  d.getDelimDate();
+	var theDateToday =  d.getDelimDate();
     //console.log("TodaysDate: " + t);
     
     var weekContainer = document.createElement("div");
@@ -137,9 +137,9 @@ DateDisplay.prototype._appendWeek = function(day, type) {
             }
         }
         
-        if (weekIterator.getDelimDate() == d.getDelimDate()) {
+        if (weekIterator.getDelimDate() == theDateToday) {
             div.className = "todaysDate";
-            console.log("Todays date :" + d.getDelimDate());
+            console.log("Todays date :" + theDateToday);
         } 
         else if (weekIterator.getDelimDate() == this._date.getDelimDate()) {
             div.className = "today";          
@@ -154,7 +154,6 @@ DateDisplay.prototype._appendWeek = function(day, type) {
 
         div.id = weekIterator.getDelimDate();
 		//console.log("div.id :" + div.id)
-
         weekContainer.appendChild(div);
     }
     this._displayNode.appendChild(weekContainer);
