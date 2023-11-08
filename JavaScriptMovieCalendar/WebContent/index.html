@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<meta http-equiv="Cache-Control" content="no-cache">
-    <title>JavaScript Movie Calendar</title>
-    <link href="calendar.css" rel="stylesheet" type="text/css" media="all" />
-    <script type="text/javascript" src="date.js"></script>
-	<script type="text/javascript" src="dateDisplay.js"></script>
-	<script type="text/javascript" src="calendar.js"></script>
+<head title="JSON jQuery AJAX Calendar">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON jQuery AJAX Calendar</title>
+    <link rel="stylesheet" href="calendar.css" media="all" />
+    <script src="jquery-1.10.2.min.js"></script>
+    <script src="date.js"></script>
+    <script src="dateDisplay.js"></script>
+    <script src="calendar.js"></script>
 </head>
-
 <body>
 <div id="wrapper">
     <div id="header">
-        <h3>JavaScript Movie Calendar</h3>
+        <h3>Sinematic Sinemas Display</h3>
     </div>
     <div id="container">
         <div id="calendar">
@@ -28,15 +28,14 @@
         <div id="navigation">
             <!-- Form to show when user wants to search for a date -->
             <div id="navSearch" class="inactive">
-                <label class="navInput">Day: </label>
-                <input type="text" id="day" class="navInput" />
-                <label class="navInput">Month: </label>
-                <input type="text" id="month" class="navInput" />
-                <label class="navInput">Year: </label>
-                <input type="text" id="year" class="navInput" />
+                <label for="day" class="navInput">Day: </label>
+                <input type="text" id="day" class="navInput" title="Enter Day" placeholder="Enter Day">
+                <label for="month" class="navInput">Month: </label>
+                <input type="text" id="month" class="navInput" title="Enter Month" placeholder="Enter Month">
+                <label for="year" class="navInput">Year: </label>
+                <input type="text" id="year" class="navInput" title="Enter Year" placeholder="Enter Year">
                 <input type="button" id="setDateSubmit" value="Set Date" class="nav" />
             </div>
-
             <!-- Regular form buttons for nav bar  -->
             <div id="navButtons" class="active">
                 <input type="button" id="previous" value="&lt;&lt; Previous" class="nav"/>
@@ -48,6 +47,5 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="jquery-3.2.1.min.js"></script>
 </body>
 </html>
