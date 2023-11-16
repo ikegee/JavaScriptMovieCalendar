@@ -5,7 +5,7 @@
  * $Date: 2011-01-16 19:08:49 -0800 (Sun, 16 Jan 2011) $
  * @modified G.E. Eidsness
  * @version $Revision: 025 $
- * $Date: 2023-10-24 23:01:39 -0700 (Tue, 24 Oct 2023) $
+ * $Date: 2023-11-15 23:01:39 -0700 (Wed, 15 Nov 2023) $
  */
  
 
@@ -27,7 +27,8 @@ class DateDisplay {
     this._titleNode = titleNode;
     this._detailsNode = detailsNode;
     this.setDate(activeDay);
-  }
+  };
+
   /**
    * Removes all of the textnode children from the displayNode
    * post: _displayNode has no children
@@ -37,7 +38,8 @@ class DateDisplay {
     while (this._displayNode.firstChild) {
       this._displayNode.removeChild(this._displayNode.firstChild);
     }
-  }
+  };
+
   /**
    * Appends a 2 letter day of the week abbreviations to the top of the date display
    * @private
@@ -55,40 +57,50 @@ class DateDisplay {
       heading.appendChild(div);
     }
     this._displayNode.appendChild(heading);
-  }  
+  };
+
   /**
    * Appends a series of child textnodes each day of the a week to the _displayNode element
-   *     followed by a single br element.  Also sets the Title for the date display to the
-   *     active days month and year
+   * followed by a single br element.  Also sets the Title for the date display to the
+   * active days month and year
    * @private
    * @param {Date} day the date object used to loop through days in the week
    */
   _appendWeek(day, type) {
     let weekContainer = document.createElement("div");
+    let currentDate = new Date().getDelimDate();
+
     weekContainer.id = "weekContainer";
     weekContainer.className = type;
+
+    let fragment = document.createDocumentFragment();
+
     for (let weekIterator = day.getWeekStart(); weekIterator <= day.getWeekEnd(); weekIterator.incrementByDay()) {
       let dayText = weekIterator.getDate();
-      //set all days to be 2 characters in length
-      let dateNumber = document.createTextNode(
-        dayText.toString().padStart(2, "0") + " "
-      );
+      let weekIteratorDate = weekIterator.getDelimDate();
+      let weekIteratorMonth = weekIterator.getMonth();
+
+      let dateNumber = document.createTextNode(dayText.toString().padStart(2, "0") + " ");
+
       let divSpacer = document.createElement("div");
       divSpacer.className = "divSpacer";
+
       let dateNumDiv = document.createElement("div");
       dateNumDiv.className = "dateNum";
       dateNumDiv.appendChild(dateNumber);
+
       let div = document.createElement("div");
       div.appendChild(divSpacer);
       div.appendChild(dateNumDiv);
-      let calendarDay = weekIterator.getDelimDate();
-      let showings = jsonShowings[calendarDay];
+
+      let showings = jsonShowings[weekIteratorDate];
       if (showings) {
         for (let show in showings) {
-          let minutes = showings[show].date.getMinutes().toString();
+          let showingsShowDate = showings[show].date;
+          let minutes = showingsShowDate.getMinutes().toString();
           minutes = minutes.length == 1 ? `${minutes}0` : minutes;
-          let movieData = `${showings[show].date.getUTCHours()}:${minutes} - ${showings[show].title}`;
-          let listing = `<div id="${showings[show].date.toISOString()}" class="listing">${movieData}</div>`;
+          let movieData = `${showingsShowDate.getUTCHours()}:${minutes} - ${showings[show].title}`;
+          let listing = `<div id="${showingsShowDate.toISOString()}" class="listing">${movieData}</div>`;
           if (type == "week") {
             let movieDescription = `${showings[show].descr.substring(0, 120)}...`;
             listing += `${movieDescription}`;
@@ -96,26 +108,40 @@ class DateDisplay {
           div.innerHTML += listing;
         }
       }
-      /**
-       * if type is "month" set class to "today" if div id is same as current date,
-       * otherwise set the class to "dateBlock" if the month is the same as the current month,
-       * otherwise set the class to "blankDateBlock"
-       */
-      let currentDate = new Date().getDelimDate();
-      div.id = weekIterator.getDelimDate();
+
+      div.id = weekIteratorDate;
       if (div.id == currentDate) {
         div.className = "today";
-        div.style.backgroundColor = "#ede2c5";
-      } else if (type == "week" || weekIterator.getMonth() == this._date.getMonth()) {
-        div.id == currentDate ? (div.className = "today") : (div.className = "dateBlock");
+        requestAnimationFrame(() => {
+          div.style.backgroundColor = "#ede2c5";
+        });
+      } else if (type == "week" || weekIteratorMonth == this._date.getMonth()) {
+        div.className = div.id == currentDate ? "today" : "dateBlock";
       } else {
         div.className = "blankDateBlock";
       }
-      weekContainer.appendChild(div);
+      fragment.appendChild(div);
     }
+
+    weekContainer.appendChild(fragment);
     this._displayNode.appendChild(weekContainer);
     this._displayNode.className = type;
-  }
+  };
+
+  /**
+   * Sets the _titleNode to the Month Name and Year for the active date
+   * @private
+   */
+  _setTitle() {
+    if (this._titleNode.firstChild) {
+      this._titleNode.removeChild(this._titleNode.firstChild);
+    } // current month and year
+    this._titleNode.appendChild(document.createTextNode(
+        this._date.getMonthWord() + " " + this._date.getFullYear()
+      )
+    );
+  };
+  
   /**
    * Clears all children from _displayNode
    * Appends a series of child nodes for each week of the month to _displayNode
@@ -134,7 +160,8 @@ class DateDisplay {
     }
     //this._loadTodaysListing();
     this._setTitle();
-  }
+  };
+  
   /**
    * Clears all children from _displayNode
    * Appends a series of child nodes for each day of the week to _displayNode
@@ -147,36 +174,13 @@ class DateDisplay {
     this._appendHeading(type);
     this._appendWeek(this._date, type);
     this._setTitle();
-  }
-  /**
-   * Sets the _titleNode to the Month Name and Year for the active date
-   * @private
-   */
-  _setTitle() {
-    if (this._titleNode.firstChild) {
-      this._titleNode.removeChild(this._titleNode.firstChild);
-    } // current month and year
-    this._titleNode.appendChild(document.createTextNode(
-        this._date.getMonthWord() + " " + this._date.getFullYear()
-      )
-    );
-  }
+  };
+  
   /**
    * Sets the active date for the date display
    * @param {Date} date used used for setting date of date display
    */
   setDate(date) {
     this._date = new Date(date);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
+  };
+};
