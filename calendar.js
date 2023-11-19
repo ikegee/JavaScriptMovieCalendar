@@ -332,7 +332,7 @@ const baseURL = "./jsonShows/";
       return matchedListings;
     } catch (error) {
       console.error("Error:", error);
-      return []; // Return an empty array if the fetch request fails
+      return []; // Return empty array if fetch request fails
     } finally {
       console.info(`Title: ${title}, Count: ${matchedListings.length}`);
       if (matchedListings.length === 0) {

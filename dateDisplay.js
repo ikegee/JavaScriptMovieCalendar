@@ -5,7 +5,7 @@
  * $Date: 2011-01-16 19:08:49 -0800 (Sun, 16 Jan 2011) $
  * @modified G.E. Eidsness
  * @version $Revision: 025 $
- * $Date: 2023-11-15 23:01:39 -0700 (Wed, 15 Nov 2023) $
+ * $Date: 2023-11-17 00:46:39 -0700 (Fri, 17 Nov 2023) $
  */
  
 
@@ -49,15 +49,21 @@ class DateDisplay {
     let heading = document.createElement("div");
     heading.id = "headingContainer";
     heading.className = type;
+  
+    let fragment = document.createDocumentFragment();
+  
     for (let i in dayNames) {
       let name = document.createTextNode(dayNames[i]);
       let div = document.createElement("div");
       div.className = "dayName";
       div.appendChild(name);
-      heading.appendChild(div);
+      fragment.appendChild(div);
     }
+    
+    heading.appendChild(fragment);
     this._displayNode.appendChild(heading);
   };
+  
 
   /**
    * Appends a series of child textnodes each day of the a week to the _displayNode element
@@ -108,7 +114,6 @@ class DateDisplay {
           div.innerHTML += listing;
         }
       }
-
       div.id = weekIteratorDate;
       if (div.id == currentDate) {
         div.className = "today";

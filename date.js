@@ -4,27 +4,25 @@
  * @version $Revision: 453 $
  * $Date: 2012-01-17 15:38:39 -0800 (Tue, 17 Jan 2012) $
  * @modified G.E. Eidsness
- * @version $Revision: 010 $
- * $Date: 2023-10-02 12:01:39 -0700 (Mon, 02 Oct 2023) $
+ * @version $Revision: 015 $
+ * $Date: 2023-11-17 00:46:39 -0700 (Fri, 17 Nov 2023) $
  */
 
 //Delimiter Constant used as separator
-Date.DELIM = "_";
+const DELIM = "_";
 
 //Calendar Related Enumerations
-Date.DAYSOFWEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
-Date.MONTHSOFYEAR = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December",];
-Date.THEFIRST = 1;
-Date.DAYSINWEEK = 6;
-Date.WEEKSTART = 0;
-Date.WEEKEND = 6;
+const DAYSOFWEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
+const MONTHSOFYEAR = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December",];
+const THEFIRST = 1;
+const DAYSINWEEK = 6;
 
 /**
  * Returns the day value of the object as an english word
  * @return day of week as a word
  */
 Date.prototype.getDayWord = function() {
-  return Date.DAYSOFWEEK[this.getDay()];
+  return DAYSOFWEEK[this.getDay()];
 };
 
 /**
@@ -32,7 +30,7 @@ Date.prototype.getDayWord = function() {
  * @return month of year as a word
  */
 Date.prototype.getMonthWord = function() {
-  return Date.MONTHSOFYEAR[this.getUTCMonth()];
+  return MONTHSOFYEAR[this.getUTCMonth()];
 };
 
 /**
@@ -40,7 +38,7 @@ Date.prototype.getMonthWord = function() {
  * @return date
  */
 Date.prototype.getMonthStart = function() {
-  return new Date(this.getFullYear(), this.getMonth(), Date.THEFIRST);
+  return new Date(this.getFullYear(), this.getMonth(), THEFIRST);
 };
 
 /**
@@ -71,7 +69,7 @@ Date.prototype.getWeekEnd = function() {
   return new Date(
     this.getFullYear(),
     this.getMonth(),
-    this.getDate() + (Date.DAYSINWEEK - this.getDay())
+    this.getDate() + (DAYSINWEEK - this.getDay())
   );
 };
 
@@ -113,30 +111,9 @@ Date.prototype.decrementByWeek = function() {
  * post: the date will have been increased by a single month
  */
 Date.prototype.incrementByMonth = function() {
-  var firstNextMonth = new Date(
-    this.getFullYear(),
-    this.getMonth() + 1,
-    Date.THEFIRST
-  );
-  var incrementedMonth = new Date(
-    this.getFullYear(),
-    this.getMonth() + 1,
-    this.getDate()
-  );
-  //Following determines if we are attempting to advance to a month with less days than
-  //the month which presently has focus.
-  if (incrementedMonth.getMonth() > firstNextMonth.getMonth()) {
-    //If true advance date to the last day of the next month
-    //in order to avoid skipping a month
-    //The following operations must be undertaken in this order
-    //as attempting to advance the month while the date is larger than the
-    //maximum days in the month results in advancing the month
-    this.setDate(firstNextMonth.getMonthEnd().getDate());
-    this.setMonth(firstNextMonth.getMonth());
-  } else {
+  Date.prototype.incrementByMonth = function() {
     this.setMonth(this.getMonth() + 1);
-  }
-  console.log("incrementByMonth:" + month);
+  };
 };
 
 /**
@@ -145,32 +122,7 @@ Date.prototype.incrementByMonth = function() {
  * post: the date will have been increased by a single month
  */
 Date.prototype.decrementByMonth = function() {
-  //Following two statements gets the last day of the previous month
-  let lastPrevMonth = this.getMonthStart();
-  lastPrevMonth.decrementByDay();
-
-  let decrementedMonth = new Date(
-    this.getFullYear(),
-    this.getMonth() - 1,
-    this.getDate()
-  );
-
-  //Following determines if we are attempting to advance to a month with less days than
-  //the month which presently has focus.
-  //if (decrementedMonth > lastPrevMonth){
-  if (decrementedMonth.getTime() > lastPrevMonth.getTime()) {
-    //If true set date to the last day of the previous month
-    //in order to avoid having a result date in the same month
-    //The following operations must be undertaken in this order
-    //as attempting to move back the month while the date is larger than
-    //the maximum days in the month results in advancing to the first of
-    //the current month
-    this.setDate(lastPrevMonth.getDate());
-    this.setMonth(lastPrevMonth.getMonth());
-  } else {
-    this.setMonth(this.getMonth() - 1);
-  }
-  console.log("decrementByMonth:" + month);
+  this.setMonth(this.getMonth() - 1);
 };
 
 /** !! Important !!
@@ -182,6 +134,6 @@ Date.prototype.getDelimDate = function() {
   let day = this.getDate().toString().padStart(2, '0');
   let month = (this.getMonth() + 1).toString().padStart(2, '0');
   let year = this.getFullYear();
-  return `${year}${Date.DELIM}${month}${Date.DELIM}${day}`;
+  return `${year}${DELIM}${month}${DELIM}${day}`;
 };
 
