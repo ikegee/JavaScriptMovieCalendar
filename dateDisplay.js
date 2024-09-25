@@ -6,6 +6,7 @@
  * @modified G.E. Eidsness
  * @version $Revision: 025 $
  * $Date: 2023-11-17 00:46:39 -0700 (Fri, 17 Nov 2023) $
+ * $Date: 2024-09-24 10:06:39 -0700 (Tue, 24 Sept 2024) $
  */
  
 
@@ -101,19 +102,25 @@ class DateDisplay {
 
       let showings = jsonShowings[weekIteratorDate];
       if (showings) {
-        for (let show in showings) {
-          let showingsShowDate = showings[show].date;
-          let minutes = showingsShowDate.getMinutes().toString();
-          minutes = minutes.length == 1 ? `${minutes}0` : minutes;
-          let movieData = `${showingsShowDate.getUTCHours()}:${minutes} - ${showings[show].title}`;
+        // Convert showings object to array and sort by date
+        let sortedShowings = Object.values(showings).sort((a, b) => {
+          return new Date(a.date) - new Date(b.date);
+        });
+      
+        for (let show of sortedShowings) {
+          let showingsShowDate = new Date(show.date);
+          let hours = showingsShowDate.getUTCHours().toString().padStart(2, '0');
+          let minutes = showingsShowDate.getMinutes().toString().padStart(2, '0');
+          let movieData = `${hours}:${minutes} - ${show.title}`;
           let listing = `<div id="${showingsShowDate.toISOString()}" class="listing">${movieData}</div>`;
           if (type == "week") {
-            let movieDescription = `${showings[show].descr.substring(0, 120)}...`;
+            let movieDescription = `${show.descr.substring(0, 120)}...`;
             listing += `${movieDescription}`;
           }
           div.innerHTML += listing;
         }
       }
+      
       div.id = weekIteratorDate;
       if (div.id == currentDate) {
         div.className = "today";
