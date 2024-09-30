@@ -105,16 +105,14 @@ Date.prototype.decrementByWeek = function() {
   this.setDate(this.getDate() - 7);
 };
 
-/**
+/** fixed 2024-08-17 00:46:39 -0700 (Fri, 17 Nov 2023)
  * Increments the value of the date object by a month
  * Only results in a single month increase
  * post: the date will have been increased by a single month
  */
 Date.prototype.incrementByMonth = function() {
-  Date.prototype.incrementByMonth = function() {
     this.setMonth(this.getMonth() + 1);
   };
-};
 
 /**
  * Decrements the value of the date object by a month

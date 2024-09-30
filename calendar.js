@@ -1,12 +1,10 @@
-//import { DateDisplay } from "./dateDisplay.js";
-
 /**
  * @author G.E. Eidsness	
  * @version $Revision: 009 $
  * $Date: 2013-09-16 12:01:39 -0700 (Mon, 16 Sept 2013) $
  * @modified G.E. Eidsness
  * @version $Revision: 032 $
- * $Date: 2023-11-15 23:28:39 -0700 (Wed, 15 Nov 2023) $
+ * $Date: 2024-09-29 10:06:39 -0700 (Mon, 29 Sept 2024) $
  */
 
 /**
@@ -67,14 +65,77 @@ const baseURL = "./jsonShows/";
     return month.toString().length == 2 ? month : "0" + month;
   };
 
-  // *** fetch method failed; back to the original *** //
+  /** 
+   * Notify user date selected is not available
+  */
   const submitRequest = function(jsonFile) {
     try {
       request.open("GET", jsonFile, false);
       request.send(null);
+      
+      const fileNameParts = jsonFile.split('/').pop().split('.')[0].split('_');
+      const year = fileNameParts[0];
+      const month = new Date(year, parseInt(fileNameParts[1]) - 1).toLocaleString('default', { month: 'long' });
+      
+      if (request.status === 404) {
+        const closestDate = findClosestAvailableDate(year, fileNameParts[1]);
+        if (closestDate) {
+          const closestMonth = closestDate.toLocaleString('default', { month: 'long' });
+          const closestYear = closestDate.getFullYear();
+          
+          const userChoice = confirm(`Data for ${month} ${year} is not available. Click OK to view ${closestMonth} ${closestYear}.`);
+          if (userChoice) {
+            const newJsonFile = `${baseURL}${closestYear}_${formatMonth(closestDate.getMonth() + 1)}.json`;
+            submitRequest(newJsonFile);
+            setDate(closestYear, closestDate.getMonth() + 1, 1);
+            return;
+          }
+        } else {
+          alert(`No available data found near ${month} ${year}.`);
+        }
+        jsonShowings = { blank: {} };
+      } else if (request.status !== 200) {
+        alert(`Error loading data for ${month} ${year}`);
+        console.error("HTTP error! status:", request.status);
+        jsonShowings = { blank: {} };
+      } else {
+        processResponse();
+      }
     } catch (error) {
+      alert(`Error loading month data for ${month} ${year}`);
       console.error("submitRequest() error occurred: ", error);
+      jsonShowings = { blank: {} };
     }
+  };
+ 
+  // Function to find the closest available date
+  const findClosestAvailableDate = function(year, month) {
+    const currentDate = new Date(year, month - 1);
+    let futureDate = new Date(currentDate);
+    let pastDate = new Date(currentDate);
+    const maxAttempts = 12; // Check up to a year in either direction
+
+    for (let i = 0; i < maxAttempts; i++) {
+      // Check future date
+      futureDate.setMonth(futureDate.getMonth() + 1);
+      if (isDataAvailable(futureDate)) return futureDate;
+
+      // Check past date
+      pastDate.setMonth(pastDate.getMonth() - 1);
+      if (isDataAvailable(pastDate)) return pastDate;
+    }
+    
+    // If no data found within the range, return null or a default date
+    return null;
+  };
+    
+  // Function to check if data is available for a given date
+  const isDataAvailable = function(date) {
+    const jsonFile = `${baseURL}${date.getFullYear()}_${formatMonth(date.getMonth() + 1)}.json`;
+    const xhr = new XMLHttpRequest();
+    xhr.open("HEAD", jsonFile, false);
+    xhr.send();
+    return xhr.status === 200;
   };
 
   /**
@@ -87,7 +148,7 @@ const baseURL = "./jsonShows/";
     alert("Request Timed Out");
   };
 
-  /** !!! added by some guy on craigslist !!!
+  /** !!! original project mod !!!
    * The date format in jsonShowings needs to be an object.
    * But in the jsonShows file, the date is in string.
    */
@@ -98,7 +159,7 @@ const baseURL = "./jsonShows/";
         jsonShowings[first][second]["date"] = new Date(jsonShowings[first][second]["date"]);
         //Sun Oct 01 2023 15:30:00 GMT-0700 (Pacific Daylight Time)
       });
-    }); // Remove previous resultsDiv if it exists
+    }); // Remove previous resultsDiv if exists
     let oldResultsDiv = document.getElementById("resultsDiv");
     if (oldResultsDiv) {
       console.log("*** oldResultsDiv ***");
@@ -107,22 +168,18 @@ const baseURL = "./jsonShows/";
   };
 
   /**
-   * modified for "dateDisplay._detailsNode.lastChild"
-   */
+  * modified for "dateDisplay._detailsNode.lastChild"
+  */
   const removeElementIfExists = function(id) {
-    let callingFunction = arguments.callee.caller;
-    if (callingFunction) {
-      //console.log("removeElement:" + callingFunction.name);
-    }
     let element = document.getElementById(id);
     if (element && element === dateDisplay._detailsNode.lastChild) {
       element.parentNode.removeChild(element);
-      //console.log("removed: " + id);
+      console.log(`Removed element: ${id}`);
     }
   };
 
   /**
-   * Process the response from the XMLHttpRequest and assign it to a global array
+   * Process response from XMLHttpRequest and assign to global array
    */
   const processResponse = function() {
     try {
@@ -145,13 +202,13 @@ const baseURL = "./jsonShows/";
     }
   };
 
-  /** !! Updated !!
+  /** New function to handle the click event on the dateDisplay element.
    * Create movie details from XMLHttpRequest, send to Details div.
    **/
   const constructDetails = function(showingsDate, todaysListingId) {
     const todaysDate = new Date();
     const currentDate = todaysDate.getDelimDate();
-    let date1 = Date.parse(currentDate.replace(/_/g, "-")); // "_" doesn't parse; "-" does.
+    let date1 = Date.parse(currentDate.replace(/_/g, "-")); // "_" doesn't parse, "-" does.
     let date2 = undefined;
     let tag = undefined;
     
@@ -210,20 +267,22 @@ const baseURL = "./jsonShows/";
         let divs = Array.from(document.getElementsByClassName("listing"));        
         let found = divs.some(div => {
           if (div.id.split("T")[0].replace(/-/g, "_") == todaysDateDiv.id) {
-            console.log("div.id:", div.id); //"YYYY-MM-DDTHH:mm:ss.sssZ"
-            constructDetails(jsonShowings[todaysDateDiv.id], div.id); // XMLHttpRequest
+            console.log("div.id:", div.id);
+            constructDetails(jsonShowings[todaysDateDiv.id], div.id);
             return true;
           }
           return false;
         });  
         if (!found) {
-          // create <div id="detailTitle">, notify user `No Listing Today:`
-          let detailsHTML = `No Listing Today: ${todaysDateDiv.id}`;
-          let detailsDiv = document.createElement("div");
-          detailsDiv.id = "ajaxDetails";
-          detailsDiv.innerHTML = detailsHTML;
-          dateDisplay._detailsNode.appendChild(detailsDiv);
-          console.log("No Listing Today: " + todaysDateDiv.id + "\n");
+          // Only display "No Listing Today" if the current month matches the displayed month
+          if (todaysDateDiv.id.split('_')[1] === (dateDisplay._date.getMonth() + 1).toString().padStart(2, '0')) {
+            let detailsHTML = `No Listing Today: ${dateDisplay._date.getDelimDate()}`;
+            let detailsDiv = document.createElement("div");
+            detailsDiv.id = "ajaxDetails";
+            detailsDiv.innerHTML = detailsHTML;
+            dateDisplay._detailsNode.appendChild(detailsDiv);
+            console.log(detailsHTML);
+          }
         }
       } else {
         console.log("Nothing for", dateDisplay._date.getDelimDate());

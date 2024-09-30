@@ -4,11 +4,10 @@
  * @version $Revision: 229 $
  * $Date: 2011-01-16 19:08:49 -0800 (Sun, 16 Jan 2011) $
  * @modified G.E. Eidsness
- * @version $Revision: 025 $
+ * @version $Revision: 030 $
  * $Date: 2023-11-17 00:46:39 -0700 (Fri, 17 Nov 2023) $
  * $Date: 2024-09-24 10:06:39 -0700 (Tue, 24 Sept 2024) $
- */
- 
+ */ 
 
 /**
  * @class DateDisplay
@@ -76,33 +75,36 @@ class DateDisplay {
   _appendWeek(day, type) {
     let weekContainer = document.createElement("div");
     let currentDate = new Date().getDelimDate();
-
+    let currentMonth = new Date().getMonth();
+    let currentYear = new Date().getFullYear();
+  
     weekContainer.id = "weekContainer";
     weekContainer.className = type;
-
+  
     let fragment = document.createDocumentFragment();
-
+  
     for (let weekIterator = day.getWeekStart(); weekIterator <= day.getWeekEnd(); weekIterator.incrementByDay()) {
       let dayText = weekIterator.getDate();
       let weekIteratorDate = weekIterator.getDelimDate();
       let weekIteratorMonth = weekIterator.getMonth();
-
+      let weekIteratorYear = weekIterator.getFullYear();
+  
       let dateNumber = document.createTextNode(dayText.toString().padStart(2, "0") + " ");
-
+  
       let divSpacer = document.createElement("div");
       divSpacer.className = "divSpacer";
-
+  
       let dateNumDiv = document.createElement("div");
       dateNumDiv.className = "dateNum";
       dateNumDiv.appendChild(dateNumber);
-
+  
       let div = document.createElement("div");
       div.appendChild(divSpacer);
       div.appendChild(dateNumDiv);
-
+  
       let showings = jsonShowings[weekIteratorDate];
       if (showings) {
-        // Convert showings object to array and sort by date
+        // Convert showings object to array and sort by date ascending
         let sortedShowings = Object.values(showings).sort((a, b) => {
           return new Date(a.date) - new Date(b.date);
         });
@@ -120,25 +122,25 @@ class DateDisplay {
           div.innerHTML += listing;
         }
       }
-      
+    
       div.id = weekIteratorDate;
-      if (div.id == currentDate) {
+      if (div.id == currentDate && weekIteratorMonth == this._date.getMonth() && weekIteratorYear == this._date.getFullYear()) {
         div.className = "today";
         requestAnimationFrame(() => {
           div.style.backgroundColor = "#ede2c5";
         });
       } else if (type == "week" || weekIteratorMonth == this._date.getMonth()) {
-        div.className = div.id == currentDate ? "today" : "dateBlock";
+        div.className = "dateBlock";
       } else {
         div.className = "blankDateBlock";
       }
       fragment.appendChild(div);
     }
-
+  
     weekContainer.appendChild(fragment);
     this._displayNode.appendChild(weekContainer);
     this._displayNode.className = type;
-  };
+  }; 
 
   /**
    * Sets the _titleNode to the Month Name and Year for the active date
