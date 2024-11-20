@@ -37,7 +37,7 @@ The calendar initializes to the current month view. Users can:
 
 ## License
 
-Copyright (c) 2024 G.E. Eidsness
+Copyright (c) 2014 G.E. Eidsness
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
