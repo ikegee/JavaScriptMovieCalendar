@@ -1,5 +1,7 @@
 # JavaScript Movie Calendar
 JavaScript Movie Calendar Project. JavaScript, HTML and CSS. JSON Object data source. 
+Visit the [GitHub Website](https://github.com) for more details.
+Working Demo [royalgrandprix.com](https://www.royalgrandprix.com/calendar/)
 
 ![alt text](screenshots/screen_1.png "Browser Screenshot")
 
