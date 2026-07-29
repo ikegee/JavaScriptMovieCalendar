@@ -1,207 +1,291 @@
 @charset "utf-8";
-/* CSS Document */
+
+:root {
+    --color-header: #455776;
+    --color-muted: #d3d3d3;
+    --color-today: #ede2c5;
+    --color-blank: #ECF1EF;
+    --color-white: #fff;
+    --color-text: #000;
+    --font-serif: Georgia, "Times New Roman", Times, serif;
+    --font-sans: Arial, Helvetica, sans-serif;
+    --calendar-width: 840px;
+    --details-width: 240px;
+    --layout-width: 1094px;
+    /* Month grid: fixed 6 weeks so every month is the same size */
+    --month-weeks: 6;
+    --month-cell-height: 95px;
+    --month-heading-height: 20px;
+    --month-cell-margin: 1px;
+    --month-cell-border: 2px;
+    --month-row-height: calc(
+        var(--month-cell-height) + (var(--month-cell-margin) * 2) + (var(--month-cell-border) * 2)
+    );
+    --month-heading-row-height: calc(
+        var(--month-heading-height) + (var(--month-cell-margin) * 2) + (var(--month-cell-border) * 2)
+    );
+    --month-grid-height: calc(
+        var(--month-heading-row-height) + (var(--month-weeks) * var(--month-row-height))
+    );
+}
 
 html {
-    margin:0;
-    font-family: Georgia, "Times New Roman", Times, serif;
-    background-color:#d3d3d3;
+    margin: 0;
+    font-family: var(--font-serif);
+    background-color: var(--color-muted);
 }
 
 body {
-    width:1094px;
-    margin-left:auto;
-    margin-right:auto;
-    background-color:White;
+    width: var(--layout-width);
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: var(--color-white);
+    box-sizing: border-box;
 }
 
 h3 {
-    margin-top: 0px;
-    margin-bottom:0px;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 span {
     display: flex;
     justify-content: center;
-    background-color:#ede2c5;
-  }
+    background-color: var(--color-today);
+}
 
 #wrapper {
-    border:solid #455776 2px;
+    border: solid var(--color-header) 2px;
 }
 
 #header {
-    background-color:#455776;
-    color:white;
-    font-weight:bold;
-    text-align:center;
+    background-color: var(--color-header);
+    color: var(--color-white);
+    font-weight: bold;
+    text-align: center;
 }
 
 #container {
-    background-color: #FFF;
+    background-color: var(--color-white);
+    display: flow-root;
 }
 
 #calendar {
-    float:left;
-    width:840px;
-    clear:left;
-	font-family: Arial, Helvetica, sans-serif;
+    float: left;
+    width: var(--calendar-width);
+    clear: left;
+    font-family: var(--font-sans);
     font-size: smaller;
 }
 
 #details {
-    float:right;
-    width:240px;
-    clear:right;
-    background-color:#d3d3d3;
+    float: right;
+    width: var(--details-width);
+    clear: right;
+    background-color: var(--color-muted);
 }
 
 #navigation {
-    clear:left;
-    background-color: #455776;
+    clear: both;
+    background-color: var(--color-header);
 }
 
 #detailTitle {
-    text-align:center;
+    text-align: center;
 }
 
 #displayTitle {
-    width: 840px;
-	font-family: Georgia, "Times New Roman", Times, serif;
-    font-weight:bold;
-    font-size:large;
-    text-align:center;
-    background-color:#d3d3d3;
+    width: var(--calendar-width);
+    font-family: var(--font-serif);
+    font-weight: bold;
+    font-size: large;
+    text-align: center;
+    background-color: var(--color-muted);
+}
+
+/* Fixed footprint for every month (6 week rows) */
+#dateDisplay.month {
+    height: var(--month-grid-height);
+    min-height: var(--month-grid-height);
+    overflow: hidden;
 }
 
 .inactive {
-    display:none;
+    display: none;
 }
 
 .nav {
-	font-family: Georgia, "Times New Roman", Times, serif;
-    margin:5px;
-    width:200px;
+    font-family: var(--font-serif);
+    margin: 5px;
+    width: 200px;
+    cursor: pointer;
 }
 
 label.navInput {
-    color: #fff;
+    color: var(--color-white);
 }
+
 .navInput {
-    margin:5px;
+    margin: 5px;
     width: 200px;
-    color: #000;
+    color: var(--color-text);
     font-weight: bold;
-
 }
 
-.navInput label{
-    color: #fff;
+.navInput label {
+    color: var(--color-white);
 }
 
 .dayName {
-    text-align:center;
-    font-weight:bold;
-    font-size:small;
-    color:#000;
-    background-color:#d3d3d3;
-    width:114px;
+    text-align: center;
+    font-weight: bold;
+    font-size: small;
+    color: var(--color-text);
+    background-color: var(--color-muted);
+    width: 114px;
 }
 
 .month .dayName {
-	font-family: Georgia, "Times New Roman", Times, serif;
-    margin:1px;
-    float:left;
-    height:20px;
+    font-family: var(--font-serif);
+    margin: var(--month-cell-margin);
+    float: left;
+    height: var(--month-heading-height);
+    box-sizing: content-box;
 }
 
 .week .dayName {
-	font-family: Georgia, "Times New Roman", Times, serif;
-    margin:2px;
-    height:50px;
-    padding-top:30px;
-    background-color:#ccc;
+    font-family: var(--font-serif);
+    margin: 2px;
+    height: 50px;
+    padding-top: 30px;
+    background-color: #ccc;
 }
 
 .week #headingContainer {
-    width:115px;
-    float:left;
+    width: 115px;
+    float: left;
 }
 
-.dateBlock:hover, .today:hover {
-    border:solid red 2px;
+.dateBlock:hover,
+.today:hover {
+    border: solid red 2px;
 }
 
-.dateBlock, .today, .blankDateBlock, .dayName {
-    border:solid #d3d3d3 2px;
+.dateBlock,
+.today,
+.blankDateBlock,
+.dayName {
+    border: solid var(--color-muted) var(--month-cell-border);
 }
 
-.month .dateBlock, .month .today, .month .blankDateBlock{
-    margin:1px;
-    float:left;
-    width:114px;
-    height:95px;
+.month .dateBlock,
+.month .today,
+.month .blankDateBlock {
+    margin: var(--month-cell-margin);
+    float: left;
+    width: 114px;
+    height: var(--month-cell-height);
+    box-sizing: content-box;
+    overflow: hidden;
 }
 
-.week .dateBlock, .week .today {
-    margin:2px;
-    width:715px;
-    height:80px;
+.week .dateBlock,
+.week .today {
+    margin: 2px;
+    width: 715px;
+    height: 80px;
 }
 
-.month .blankDateBlock{
-    background-color:#ECF1EF;
+.month .blankDateBlock {
+    background-color: var(--color-blank);
+}
+
+.today {
+    background-color: var(--color-today);
 }
 
 .week #weekContainer {
-    width:720px;
-    float:left;
-    margin-left:5px;
+    width: 720px;
+    float: left;
+    margin-left: 5px;
 }
 
 .dateNum {
-    float:right;
-    text-align:center;
-    font-size:x-small;
-    padding:1px;
-    background-color: #d3d3d3;
+    float: right;
+    text-align: center;
+    font-size: x-small;
+    padding: 1px;
+    background-color: var(--color-muted);
 }
 
 .month .dateNum {
-    float:right;
+    float: right;
 }
 
 .week .dateNum {
-    float:left;
+    float: left;
 }
 
-.today:hover .listing:hover, .dateBlock:hover .listing:hover {
-	text-decoration:underline;
-    color:#455776;
+.today:hover .listing:hover,
+.dateBlock:hover .listing:hover {
+    text-decoration: underline;
+    color: var(--color-header);
+    cursor: pointer;
 }
 
 .month .listing {
-    clear:both;
-    float:left;
-    font-size:x-small;
-    width:114px;
+    clear: both;
+    float: left;
+    font-size: x-small;
+    width: 114px;
 }
 
 .week .listing {
-    font-size:x-small;
-    width: 690px;
-    margin:0 10px 0 20px;
-    width:675px;
+    font-size: x-small;
+    width: 675px;
+    margin: 0 10px 0 20px;
 }
 
 .blankDateBlock .listing {
-    display:none;
+    display: none;
 }
 
 .month .description {
-    display:none;
+    display: none;
 }
 
-#ajaxDetails, #resultsDiv {
-    font-size:90%;
-	background-color:white;
+.week .description {
+    font-size: x-small;
+    margin: 0 10px 0 20px;
+    width: 675px;
+}
+
+#ajaxDetails,
+#resultsDiv {
+    font-size: 90%;
+    background-color: var(--color-white);
+}
+
+#searchDiv {
+    padding: 4px;
+}
+
+@media (max-width: 1100px) {
+    body {
+        width: auto;
+        max-width: var(--layout-width);
+    }
+
+    #calendar,
+    #displayTitle {
+        float: none;
+        width: 100%;
+    }
+
+    #details {
+        float: none;
+        width: 100%;
+        clear: both;
+    }
 }

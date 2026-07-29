@@ -1,137 +1,150 @@
 /**
- * @projectDescription Extends the native Date class to perform sundry calendar specific operations
+ * @file date.js
+ * @description Calendar helpers on the native Date prototype (side-effect module).
+ * Used by date-display.js and calendar.js for week/month navigation and YYYY_MM_DD keys.
  * @author Thomas Lane
  * @version $Revision: 453 $
  * $Date: 2012-01-17 15:38:39 -0800 (Tue, 17 Jan 2012) $
  * @modified G.E. Eidsness
- * @version $Revision: 015 $
+ * @version $Revisions: 002 $
  * $Date: 2023-11-17 00:46:39 -0700 (Fri, 17 Nov 2023) $
+ * $Date: 2026-07-28 11:36:29 -0700 (Tue, 28 July 2026) $
  */
 
-//Delimiter Constant used as separator
-const DELIM = "_";
+// Separator for delimited date strings (matches jsonShows/ file naming)
+Date.DELIM = "_";
 
-//Calendar Related Enumerations
-const DAYSOFWEEK = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",];
-const MONTHSOFYEAR = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December",];
-const THEFIRST = 1;
-const DAYSINWEEK = 6;
+// Week bounds (Sunday-start calendar)
+Date.WEEKSTART = 0;
+Date.WEEKEND = 6;
 
 /**
- * Returns the day value of the object as an english word
- * @return day of week as a word
+ * @returns {string} Day of week as an English word
  */
-Date.prototype.getDayWord = function() {
-  return DAYSOFWEEK[this.getDay()];
+Date.prototype.getDayWord = function () {
+  return this.toLocaleDateString("en-US", { weekday: "long" });
 };
 
 /**
- * Returns the month value of the object as an english word
- * @return month of year as a word
+ * @returns {string} Month of year as an English word
  */
-Date.prototype.getMonthWord = function() {
-  return MONTHSOFYEAR[this.getUTCMonth()];
+Date.prototype.getMonthWord = function () {
+  // Use local month (not UTC) so names match getMonth()/getDelimDate()
+  return this.toLocaleDateString("en-US", { month: "long" });
 };
 
 /**
- * Returns a date object corresponding to the first day of the dates month
- * @return date
+ * @returns {Date} First day of this date's month
  */
-Date.prototype.getMonthStart = function() {
-  return new Date(this.getFullYear(), this.getMonth(), THEFIRST);
+Date.prototype.getMonthStart = function () {
+  return new Date(this.getFullYear(), this.getMonth(), 1);
 };
 
 /**
- * Returns a date object corresponding to the last day of the dates month
- * @return date
+ * @returns {Date} Last day of this date's month
  */
-Date.prototype.getMonthEnd = function() {
+Date.prototype.getMonthEnd = function () {
   return new Date(this.getFullYear(), this.getMonth() + 1, 0);
 };
 
 /**
- * Returns a date object corresponding to the first day of the dates week
- * @return date
+ * @returns {Date} First day of this date's week (Sunday)
  */
-Date.prototype.getWeekStart = function() {
+Date.prototype.getWeekStart = function () {
   return new Date(
     this.getFullYear(),
     this.getMonth(),
-    this.getDate() - this.getDay()
+    this.getDate() - (this.getDay() - Date.WEEKSTART)
   );
 };
 
 /**
- * Returns a date object corresponding to the last day of the dates week
- * @return date
+ * @returns {Date} Last day of this date's week (Saturday)
  */
-Date.prototype.getWeekEnd = function() {
+Date.prototype.getWeekEnd = function () {
   return new Date(
     this.getFullYear(),
     this.getMonth(),
-    this.getDate() + (DAYSINWEEK - this.getDay())
+    this.getDate() + (Date.WEEKEND - this.getDay())
   );
 };
 
 /**
- * Increments the value of the date object as by a single day
- * post: the date will have been increased by a single day
+ * Mutates this date forward by one day.
  */
-Date.prototype.incrementByDay = function() {
+Date.prototype.incrementByDay = function () {
   this.setDate(this.getDate() + 1);
 };
 
 /**
- * Decrements the value of the date object as by a single day
- * post: the date will have been descreased by a single day
+ * Mutates this date backward by one day.
  */
-Date.prototype.decrementByDay = function() {
+Date.prototype.decrementByDay = function () {
   this.setDate(this.getDate() - 1);
 };
 
 /**
- * Increments the value of the date object by seven days
- * post: the date will have been increased by seven days
+ * Mutates this date forward by seven days.
  */
-Date.prototype.incrementByWeek = function() {
+Date.prototype.incrementByWeek = function () {
   this.setDate(this.getDate() + 7);
 };
 
 /**
- * Decrements the value of the date object by seven days
- * post: the date will have been decreased by seven days
+ * Mutates this date backward by seven days.
  */
-Date.prototype.decrementByWeek = function() {
+Date.prototype.decrementByWeek = function () {
   this.setDate(this.getDate() - 7);
 };
 
-/** fixed 2024-08-17 00:46:39 -0700 (Fri, 17 Nov 2023)
- * Increments the value of the date object by a month
- * Only results in a single month increase
- * post: the date will have been increased by a single month
+/**
+ * Mutates this date forward by one month, clamping the day if needed
+ * (e.g. Jan 31 → Feb 28/29 instead of skipping to March).
  */
-Date.prototype.incrementByMonth = function() {
+Date.prototype.incrementByMonth = function () {
+  const firstNextMonth = new Date(this.getFullYear(), this.getMonth() + 1, 1);
+  const sameDayNextMonth = new Date(
+    this.getFullYear(),
+    this.getMonth() + 1,
+    this.getDate()
+  );
+
+  if (sameDayNextMonth.getMonth() !== firstNextMonth.getMonth()) {
+    this.setDate(firstNextMonth.getMonthEnd().getDate());
+    this.setMonth(firstNextMonth.getMonth());
+  } else {
     this.setMonth(this.getMonth() + 1);
-  };
+  }
+};
 
 /**
- * Decrements the value of the date object by a month
- * Always results in a single month decrease
- * post: the date will have been increased by a single month
+ * Mutates this date backward by one month, clamping the day if needed
+ * (e.g. Mar 31 → Feb 28/29 instead of landing on Mar 2/3).
  */
-Date.prototype.decrementByMonth = function() {
-  this.setMonth(this.getMonth() - 1);
+Date.prototype.decrementByMonth = function () {
+  const lastPrevMonth = this.getMonthStart();
+  lastPrevMonth.decrementByDay();
+
+  const sameDayPrevMonth = new Date(
+    this.getFullYear(),
+    this.getMonth() - 1,
+    this.getDate()
+  );
+
+  if (sameDayPrevMonth.getTime() > lastPrevMonth.getTime()) {
+    this.setDate(lastPrevMonth.getDate());
+    this.setMonth(lastPrevMonth.getMonth());
+  } else {
+    this.setMonth(this.getMonth() - 1);
+  }
 };
 
-/** !! Important !!
- * Returns value of the date object in the form YYYY_MM_DD
- * with the possibility of single digit months and days
- * @return 	string
+/**
+ * @returns {string} Date as YYYY_MM_DD (zero-padded month and day)
  */
-Date.prototype.getDelimDate = function() {
-  let day = this.getDate().toString().padStart(2, '0');
-  let month = (this.getMonth() + 1).toString().padStart(2, '0');
-  let year = this.getFullYear();
-  return `${year}${DELIM}${month}${DELIM}${day}`;
+Date.prototype.getDelimDate = function () {
+  const year = this.getFullYear();
+  const month = String(this.getMonth() + 1).padStart(2, "0");
+  const day = String(this.getDate()).padStart(2, "0");
+  return year + Date.DELIM + month + Date.DELIM + day;
 };
-
