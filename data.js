@@ -1,7 +1,15 @@
 /**
  * @file data.js
  * @description Load and search movie showings from jsonShows/*.json
- */
+ * @author G.E. Eidsness	
+ * @version $Revision: 009 $
+ * $Date: 2013-09-16 12:01:39 -0700 (Mon, 16 Sept 2013) $
+ * @version $Revisions: 003 $
+ * $Date: 2023-11-17 00:46:39 -0700 (Fri, 17 Nov 2023) $
+ * $Date: 2024-09-29 10:06:39 -0700 (Mon, 29 Sept 2024) $
+ * @version $Rewrite: 001 $
+ * $Date: 2026-07-28 11:36:29 -0700 (Tue, 28 July 2026) $
+*/
 
 /**
  * @typedef {Object} Showing
