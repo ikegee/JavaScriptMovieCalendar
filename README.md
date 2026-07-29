@@ -15,16 +15,16 @@ JavaScript Movie [Calendar Project](https://www.royalgrandprix.com/calendar/). J
 
 ## Technical Stack
 
-- JavaScript (ES5)
-- jQuery
-- XMLHttpRequest for AJAX
+- JavaScript (ES6)
 - JSON data structure
 
 ## Project Structure
 
-- `calendar.js` - Main application logic and event handlers
-- `date.js` - Date manipulation utilities
-- `dateDisplay.js` - Calendar display components
+- `calendar.js` - Entry: init, navigation, wiring
+- `date.js` - Date prototype helpers (side-effect import)
+- `date-display.js` - export class DateDisplay — grid rendering
+- `data.js` - jsonShowings, loadShowings, fetchAsyncListing, URL helpers
+- `ui-details.js` - Details pane, clicks, search UI
 - `jsonShows/` - Directory containing movie showing data
 
 ## Usage
